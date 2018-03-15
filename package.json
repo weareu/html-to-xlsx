@@ -20,7 +20,7 @@
   "dependencies": {
     "cheerio": "1.0.0-rc.2",
     "in-publish": "2.0.0",
-    "juice": "4.2.3",
+    "juice": "2.0.0",
     "msexcel-builder-extended": "0.0.7",
     "phantom-workers": "0.4.2",
     "phantomjs": "1.9.17",
