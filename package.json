@@ -1,6 +1,6 @@
 {
   "name": "html-to-xlsx",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "author": {
     "name": "Jan Blaha",
     "email": "jan.blaha@hotmail.com"
@@ -18,10 +18,13 @@
     "url": "git@github.com:pofider/html-to-xlsx.git"
   },
   "dependencies": {
+    "cheerio": "1.0.0-rc.2",
     "in-publish": "2.0.0",
+    "juice": "4.2.3",
     "msexcel-builder-extended": "0.0.7",
     "phantom-workers": "0.4.2",
     "phantomjs": "1.9.17",
+    "should": "5.0.1",
     "uuid": "2.0.1"
   },
   "devDependencies": {

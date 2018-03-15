@@ -1,12 +1,13 @@
-var should = require("should"),
-    path = require("path"),
-    fs = require("fs"),
+var should = require('should'),
+    path = require('path'),
+    fs = require('fs'),
     xlsx = require('xlsx'),
-    tmpDir = path.join(__dirname, "temp"),
-    phantomServerStrategy = require("../lib/serverStrategy.js"),
-    dedicatedProcessStrategy = require("../lib/dedicatedProcessStrategy.js");
+    tmpDir = path.join(__dirname, 'temp'),
+    phantomServerStrategy = require('../lib/serverStrategy.js'),
+    dedicatedProcessStrategy = require('../lib/dedicatedProcessStrategy.js'),
+    htmlStrategy = require('../lib/htmlStrategy.js');
 
-describe("html extraction", function () {
+describe('html extraction', function () {
     options = {
         tmpDir: tmpDir
     };
@@ -15,24 +16,28 @@ describe("html extraction", function () {
         rmDir(tmpDir);
     })
 
-    describe("phantom-server", function() {
+    describe('phantom-server', function() {
        common(phantomServerStrategy);
     });
 
-    describe("dedicated-process", function() {
+    describe('dedicated-process', function() {
         common(dedicatedProcessStrategy);
     });
 
-    describe("dedicated-process use phantomJSPath", function() {
+    describe('html', function() {
+        common(htmlStrategy);
+     });
+
+    describe('dedicated-process use phantomJSPath', function() {
         common(dedicatedProcessStrategy);
     });
 
     function common(strategy) {
-        it("should build simple table", function (done) {
-          if (strategy === "") {
-            options.phantomJSPath =  path.join(__dirname, "../node_modules/phantomjs/bin/phantomjs");
+        it('should build simple table', function (done) {
+          if (strategy === '') {
+            options.phantomJSPath =  path.join(__dirname, '../node_modules/phantomjs/bin/phantomjs');
           }
-            strategy(options, "<table><tr><td>1</td></tr></table>", "", function (err, table) {
+            strategy(options, '<table><tr><td>1</td></tr></table>', '', function (err, table) {
                 if (err)
                     return done(err);
 
@@ -43,18 +48,19 @@ describe("html extraction", function () {
             });
         });
 
-        it("should parse backgroud color", function (done) {
-            strategy(options, "<table><tr><td style='background-color:red'>1</td></tr></table>", "", function (err, table) {
+        it('should parse backgroud color', function (done) {
+            strategy(options, '<table><tr><td style="background-color:red">1</td></tr></table>', '', function (err, table) {
                 if (err)
                     return done(err);
 
+                    console.log(table.rows[0][0].backgroundColor);
                 table.rows[0][0].backgroundColor[0].should.be.eql('255');
                 done();
             });
         });
 
-        it("should parse foregorund color", function (done) {
-            strategy(options, "<table><tr><td style='color:red'>1</td></tr></table>", "", function (err, table) {
+        it('should parse foregorund color', function (done) {
+            strategy(options, '<table><tr><td style="color:red">1</td></tr></table>', '', function (err, table) {
                 if (err)
                     return done(err);
 
@@ -63,8 +69,8 @@ describe("html extraction", function () {
             });
         });
 
-        it("should parse fontsize", function (done) {
-            strategy(options, "<table><tr><td style='font-size:19px'>1</td></tr></table>", "", function (err, table) {
+        it('should parse fontsize', function (done) {
+            strategy(options, '<table><tr><td style="font-size:19px">1</td></tr></table>', '', function (err, table) {
                 if (err)
                     return done(err);
 
@@ -73,8 +79,8 @@ describe("html extraction", function () {
             });
         });
 
-        it("should parse verticalAlign", function (done) {
-            strategy(options, "<table><tr><td style='vertical-align:bottom'>1</td></tr></table>", "", function (err, table) {
+        it('should parse verticalAlign', function (done) {
+            strategy(options, '<table><tr><td style="vertical-align:bottom">1</td></tr></table>', '', function (err, table) {
                 if (err)
                     return done(err);
 
@@ -83,8 +89,8 @@ describe("html extraction", function () {
             });
         });
 
-        it("should parse horizontal align", function (done) {
-            strategy(options, "<table><tr><td style='text-align:left'>1</td></tr></table>", "", function (err, table) {
+        it('should parse horizontal align', function (done) {
+            strategy(options, '<table><tr><td style="text-align:left">1</td></tr></table>', '', function (err, table) {
                 if (err)
                     return done(err);
 
@@ -93,8 +99,8 @@ describe("html extraction", function () {
             });
         });
 
-        it("should parse width", function (done) {
-            strategy(options, "<table><tr><td style='width:19px'>1</td></tr></table>", "", function (err, table) {
+        it('should parse width', function (done) {
+            strategy(options, '<table><tr><td style="width:19px">1</td></tr></table>', '', function (err, table) {
                 if (err)
                     return done(err);
 
@@ -103,8 +109,8 @@ describe("html extraction", function () {
             });
         });
 
-        it("should parse height", function (done) {
-            strategy(options, "<table><tr><td style='height:19px'>1</td></tr></table>", "", function (err, table) {
+        it('should parse height', function (done) {
+            strategy(options, '<table><tr><td style="height:19px">1</td></tr></table>', '', function (err, table) {
                 if (err)
                     return done(err);
 
@@ -113,8 +119,8 @@ describe("html extraction", function () {
             });
         });
 
-        it("should parse border", function (done) {
-            strategy(options, "<table><tr><td style='border-style:solid;'>1</td></tr></table>", "", function (err, table) {
+        it('should parse border', function (done) {
+            strategy(options, '<table><tr><td style="border-style:solid;">1</td></tr></table>', '', function (err, table) {
                 if (err)
                     return done(err);
 
@@ -127,8 +133,8 @@ describe("html extraction", function () {
             });
         });
 
-        it("should parse backgroud color from styles with line endings", function (done) {
-            strategy(options, "<style> td { \n background-color: red \n } </style><table><tr><td>1</td></tr></table>", "", function (err, table) {
+        it('should parse backgroud color from styles with line endings', function (done) {
+            strategy(options, '<style> td { \n background-color: red \n } </style><table><tr><td>1</td></tr></table>', '', function (err, table) {
                 if (err)
                     return done(err);
 
@@ -137,13 +143,13 @@ describe("html extraction", function () {
             });
         });
 
-        it("should work for long tables", function (done) {
+        it('should work for long tables', function (done) {
             this.timeout(7000);
-            var rows = "";
+            var rows = '';
             for (var i = 0; i < 10000; i++) {
-                rows += "<tr><td>1</td></tr>"
+                rows += '<tr><td>1</td></tr>'
             }
-            strategy(options, "<table>" + rows + "</table>", "", function (err, table) {
+            strategy(options, '<table>' + rows + '</table>', '', function (err, table) {
                 if (err)
                     return done(err);
 
@@ -152,42 +158,42 @@ describe("html extraction", function () {
             });
         });
 
-        it("should parse colspan", function (done) {
-            strategy(options, "<table><tr><td colspan='6'></td><td>Column 7</td></tr></table>", "", function (err, table) {
+        it('should parse colspan', function (done) {
+            strategy(options, '<table><tr><td colspan="6"></td><td>Column 7</td></tr></table>', '', function (err, table) {
                 if (err)
                     return done(err);
 
                 table.rows[0][0].colspan.should.be.eql(6);
-                table.rows[0][1].value.should.be.eql("Column 7");
+                table.rows[0][1].value.should.be.eql('Column 7');
                 done();
             });
         });
 
-        it("should parse rowspan", function (done) {
-            strategy(options, "<table><tr><td rowspan='2'>Col 1</td><td>Col 2</td></tr></table>", "", function (err, table) {
+        it('should parse rowspan', function (done) {
+            strategy(options, '<table><tr><td rowspan="2">Col 1</td><td>Col 2</td></tr></table>', '', function (err, table) {
                 if (err)
                     return done(err);
 
                 table.rows[0][0].rowspan.should.be.eql(2);
-                table.rows[0][0].value.should.be.eql("Col 1");
-                table.rows[0][1].value.should.be.eql("Col 2");
+                table.rows[0][0].value.should.be.eql('Col 1');
+                table.rows[0][1].value.should.be.eql('Col 2');
                 done();
             });
         });
 
-        it("should parse complex rowspan", function (done) {
+        it('should parse complex rowspan', function (done) {
             strategy(options,
-              "<table><tr><td rowspan='3'>Row 1 Col 1</td><td>Row 1 Col 2</td>" +
-              "<td>Row 1 Col 3</td><td>Row 1 Col 4</td></tr><tr><td rowspan='2'>Row 2 Col 1</td>" +
-              "<td rowspan='2'>Row 2 Col 2</td><td>Row 2 Col 3</td></tr><tr><td>Row 3 Col 3</td>" +
-              "</tr></table>",
-              "", function (err, table) {
+              '<table><tr><td rowspan="3">Row 1 Col 1</td><td>Row 1 Col 2</td>' +
+              '<td>Row 1 Col 3</td><td>Row 1 Col 4</td></tr><tr><td rowspan="2">Row 2 Col 1</td>' +
+              '<td rowspan="2">Row 2 Col 2</td><td>Row 2 Col 3</td></tr><tr><td>Row 3 Col 3</td>' +
+              '</tr></table>',
+              '', function (err, table) {
                 if (err)
                     return done(err);
 
                 table.rows[0][0].rowspan.should.be.eql(3);
-                table.rows[0][0].value.should.be.eql("Row 1 Col 1");
-                table.rows[1][1].value.should.be.eql("Row 2 Col 2");
+                table.rows[0][0].value.should.be.eql('Row 1 Col 1');
+                table.rows[1][1].value.should.be.eql('Row 2 Col 2');
                 done();
             });
         });
@@ -195,14 +201,18 @@ describe("html extraction", function () {
 });
 
 
-describe("html to xlsx conversion in phantom", function () {
+describe('html to xlsx conversion in phantom', function () {
 
-    describe("phantom-server", function () {
-        commonConversion("phantom-server");
+    describe('phantom-server', function () {
+        commonConversion('phantom-server');
     });
 
-    describe("dedicated-process", function () {
-        commonConversion("dedicated-process");
+    describe('dedicated-process', function () {
+        commonConversion('dedicated-process');
+    });
+
+    describe('html', function () {
+        commonConversion('html');
     });
 
     function commonConversion(strategyName) {
@@ -211,25 +221,25 @@ describe("html to xlsx conversion in phantom", function () {
 
         beforeEach(function () {
             rmDir(tmpDir);
-            conversion = require("../lib/conversion.js")({
+            conversion = require('../lib/conversion.js')({
                 tmpDir: tmpDir,
                 numberOfWorkers: 1,
                 strategy: strategyName
             });
         });
 
-        it("should not fail", function (done) {
-            conversion("<table><tr><td>hello</td></tr>", function (err, res) {
+        it('should not fail', function (done) {
+            conversion('<table><tr><td>hello</td></tr>', function (err, res) {
                 if (err)
                     return done(err);
 
-                res.should.have.property("readable");
+                res.should.have.property('readable');
                 done();
             });
         });
 
-        it("should callback error when input contains invalid characters", function (done) {
-            conversion("<table><tr><td></td></tr></table>", function (err, res) {
+        it('should callback error when input contains invalid characters', function (done) {
+            conversion('<table><tr><td></td></tr></table>', function (err, res) {
                 if (err)
                     return done();
 
@@ -237,8 +247,8 @@ describe("html to xlsx conversion in phantom", function () {
             });
         });
 
-        it("should be able to parse xlsx", function (done) {
-            conversion("<table><tr><td>hello</td></tr>", function (err, res) {
+        it('should be able to parse xlsx', function (done) {
+            conversion('<table><tr><td>hello</td></tr>', function (err, res) {
                 if (err)
                     return done(err);
 
@@ -252,8 +262,8 @@ describe("html to xlsx conversion in phantom", function () {
             });
         });
 
-        it("should translate ampersands", function (done) {
-            conversion("<table><tr><td>& &</td></tr>", function (err, res) {
+        it('should translate ampersands', function (done) {
+            conversion('<table><tr><td>& &</td></tr>', function (err, res) {
                 if (err)
                     return done(err);
 
@@ -267,8 +277,8 @@ describe("html to xlsx conversion in phantom", function () {
             });
         });
 
-        it("should callback error when row doesn't contain cells", function (done) {
-            conversion("<table><tr>Hello</tr></table>", function (err, res) {
+        it('should callback error when row doesn\'t contain cells', function (done) {
+            conversion('<table><tr>Hello</tr></table>', function (err, res) {
                 if (err)
                     return done();
 

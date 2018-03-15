@@ -5,7 +5,7 @@
 
 **node.js html to xlsx transformation**
 
-Transformation only supports html table and several basic style properties. No images or charts are currently supported. 
+Transformation only supports html table and several basic style properties. No charts are currently supported. 
 
 ```js
 var conversion = require("html-to-xlsx")();
