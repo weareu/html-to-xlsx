@@ -21,9 +21,9 @@
     "cheerio": "1.0.0-rc.2",
     "in-publish": "2.0.0",
     "juice": "2.0.0",
-    "msexcel-builder-extended": "0.0.7",
-    "phantom-workers": "0.4.2",
-    "phantomjs": "1.9.17",
+    "msexcel-builder-extended": "0.0.8",
+    "phantom-workers": "0.4.3",
+    "phantomjs": "1.9.20",
     "should": "5.0.1",
     "uuid": "2.0.1"
   },
